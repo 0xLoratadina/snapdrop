@@ -23,7 +23,7 @@ Este proyecto implementa una plataforma simple para compartir archivos. Permite 
 1. Clona el repositorio:
 
     ```bash
-    git clone https://github.com/tuusuario/snapdrop-clone.git
+    git clone https://github.com/DrBabaBoy/snapdrop.git
     cd snapdrop-clone
     ```
 
