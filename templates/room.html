@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sala {{ pin }}</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Orbitron', sans-serif;
+            background: linear-gradient(135deg, #ffffff, #f3f4f6);
+            color: #2d3748;
+        }
+
+        h1 {
+            color: #1a202c;
+        }
+
+        .neon-button {
+            background-color: #f0f4f8;
+            border: 2px solid #1a202c;
+            color: #1a202c;
+            transition: all 0.3s ease-in-out;
+            box-shadow: 0 0 10px #1a202c, 0 0 40px #1a202c, 0 0 80px #1a202c;
+        }
+
+        .neon-button:hover {
+            box-shadow: 0 0 20px #1a202c, 0 0 60px #1a202c, 0 0 100px #1a202c;
+        }
+
+        .container {
+            max-width: 90%;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        @media (min-width: 640px) {
+            .container {
+                max-width: 60%;
+            }
+        }
+
+        .file-list li {
+            background-color: #e2e8f0;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            padding: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .file-list {
+            max-width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mx-auto mt-10 max-w-3xl bg-transparent p-10">
+        <h1 class="text-4xl text-center mb-8">Sala {{ pin }}</h1>
+
+        {% if is_owner %}
+        <h2 class="text-2xl mb-4">Subir Archivo</h2>
+        <form action="/upload_file/{{ pin }}" method="POST" enctype="multipart/form-data">
+            <input type="file" name="file" class="border p-2 w-full mb-4">
+            <button type="submit" class="neon-button py-2 px-4 rounded w-full">Subir</button>
+        </form>
+
+        <h2 class="text-2xl mb-4 mt-10">Acciones del Dueño</h2>
+        <button id="closeRoomBtn" class="neon-button py-2 px-4 rounded w-full mb-4">Cerrar Sala</button>
+        {% endif %}
+
+        <h2 class="text-2xl mt-10 mb-4">Archivos en la Sala</h2>
+        <ul id="fileList" class="file-list">
+            {% for file in files %}
+            <li>
+                {{ file }}
+                <a href="/download_file/{{ file }}" class="neon-button py-1 px-2 rounded">Descargar</a>
+            </li>
+            {% endfor %}
+        </ul>
+
+        <h2 class="text-2xl mt-10 mb-4">Clientes Conectados</h2>
+        <ul id="clientList">
+            {% for client in clients %}
+            <li>{{ client.name }} ({{ client.device }}) - {{ client.ip }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <script>
+        function fetchUpdatedData() {
+            fetch('/get_room_data/{{ pin }}')
+            .then(response => response.json())
+            .then(data => {
+                const fileList = document.getElementById('fileList');
+                fileList.innerHTML = '';
+                data.files.forEach(file => {
+                    const listItem = document.createElement('li');
+                    listItem.innerHTML = `${file} <a href="/download_file/${file}" class="neon-button py-1 px-2 rounded">Descargar</a>`;
+                    fileList.appendChild(listItem);
+                });
+
+                const clientList = document.getElementById('clientList');
+                clientList.innerHTML = '';
+                data.clients.forEach(client => {
+                    const listItem = document.createElement('li');
+                    listItem.textContent = `${client.name} (${client.device}) - ${client.ip}`;
+                    clientList.appendChild(listItem);
+                });
+            })
+            .catch(error => console.error('Error al actualizar:', error));
+        }
+
+        setInterval(fetchUpdatedData, 5000);
+
+        document.getElementById('closeRoomBtn').addEventListener('click', () => {
+            if (confirm('¿Estás seguro de que deseas cerrar la sala? Esta acción eliminará todos los archivos.')) {
+                fetch(`/close_room/{{ pin }}`, { method: 'POST' })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        alert('Sala cerrada correctamente.');
+                        window.location.href = '/';
+                    } else {
+                        alert('Error: ' + data.message);
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>
