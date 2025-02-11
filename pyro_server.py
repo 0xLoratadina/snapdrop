@@ -49,12 +49,12 @@ class RoomManager:
             return {"status": "error", "message": "Sala no encontrada"}
 
 def main():
-    daemon = Pyro4.Daemon()  # Crear daemon Pyro
-    ns = Pyro4.locateNS()    # Localizar el servidor de nombres
-    uri = daemon.register(RoomManager)  # Registrar el objeto
-    ns.register("room.manager", uri)    # Registrar el nombre del servidor Pyro
+    daemon = Pyro4.Daemon()  
+    ns = Pyro4.locateNS()  
+    uri = daemon.register(RoomManager)  
+    ns.register("room.manager", uri)   
     print("Servidor Pyro RoomManager iniciado.")
-    daemon.requestLoop()  # Iniciar el bucle de espera de solicitudes
+    daemon.requestLoop()
 
 if __name__ == '__main__':
     main()
