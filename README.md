@@ -1,88 +1,88 @@
 # SnapDrop
 
-Este proyecto implementa una plataforma simple para compartir archivos. Permite a los usuarios crear y unirse a salas donde se pueden cargar y compartir archivos entre dispositivos conectados. El proyecto utiliza Pyro4 para la gestión de salas y Flask para la interfaz web.
+This project implements a simple file-sharing platform. It allows users to create and join rooms where files can be uploaded and shared between connected devices. The project uses Pyro4 for room management and Flask for the web interface.
 
-## Estructura del Proyecto
+## Project Structure
 
-- `index.html` - La página principal donde los usuarios pueden crear o unirse a salas proporcionando un PIN.
-- `room.html` - La página de la sala que muestra los archivos subidos y los clientes conectados. También permite la carga de archivos por parte del propietario de la sala.
-- `pyro_server.py` - Gestiona las salas, clientes y archivos utilizando Pyro4.
-- `server.py` - Un servidor Flask que interactúa con el servidor Pyro4 para gestionar la interfaz web, permitiendo crear/unirse a salas y manejar la carga/descarga de archivos.
-- `start_servers.py` - Un script que inicia tanto el servidor de nombres Pyro4 como el servidor Flask en hilos separados.
+- `index.html` – The main page where users can create or join rooms by entering a PIN.
+- `room.html` – The room page that displays uploaded files and connected clients. It also allows the room owner to upload files.
+- `pyro_server.py` – Manages rooms, clients, and files using Pyro4.
+- `server.py` – A Flask server that interacts with the Pyro4 server to manage the web interface, allowing room creation/joining and handling file uploads/downloads.
+- `start_servers.py` – A script that starts both the Pyro4 name server and the Flask server in separate threads.
 
-## Características Principales
+## Key Features
 
-1. **Gestión de Salas**: Los usuarios pueden crear salas, las cuales generan un PIN único que otros usuarios pueden utilizar para unirse a la sala.
-2. **Carga/Descarga de Archivos**: Los propietarios de las salas pueden subir archivos, y todos los clientes conectados pueden descargarlos.
-3. **Conexión de Clientes**: Los clientes son identificados por el tipo de dispositivo (móvil, tableta, escritorio) y su dirección IP.
-4. **Actualización en Tiempo Real**: La página de la sala se actualiza automáticamente para mostrar archivos recién subidos y nuevos clientes conectados.
-5. **Cierre de Salas**: El propietario de la sala puede cerrar la sala, lo que elimina todos los archivos y desconecta a todos los clientes.
+1. **Room Management**: Users can create rooms, which generate a unique PIN that other users can use to join.
+2. **File Upload/Download**: Room owners can upload files, and all connected clients can download them.
+3. **Client Connection**: Clients are identified by device type (mobile, tablet, desktop) and IP address.
+4. **Real-Time Updates**: The room page automatically refreshes to show newly uploaded files and newly connected clients.
+5. **Room Closure**: The room owner can close the room, which deletes all files and disconnects all clients.
 
-## Instalación
+## Installation
 
-1. Clona el repositorio:
+1. Clone the repository:
 
     ```bash
     git clone https://github.com/DrBabaBoy/snapdrop.git
     cd snapdrop-clone
     ```
 
-2. Instala las dependencias necesarias:
+2. Install the required dependencies:
 
     ```bash
     pip install -r requirements.txt
     ```
 
-    El archivo `requirements.txt` debería incluir:
+    The `requirements.txt` file should include:
     - Flask
     - Pyro4
     - user-agents
 
-3. Configura la estructura del directorio del proyecto:
+3. Set up the project directory structure:
 
     ```bash
     mkdir uploads
     ```
 
-4. Inicia los servidores:
+4. Start the servers:
 
     ```bash
     python start_servers.py
     ```
 
-    Esto iniciará:
-    - El servidor de nombres Pyro4
-    - El servidor de gestión de salas Pyro4
-    - El servidor web Flask
+    This will start:
+    - The Pyro4 name server
+    - The Pyro4 room management server
+    - The Flask web server
 
-5. Accede a la interfaz web visitando `http://localhost:5000`.
+5. Access the web interface by visiting `http://localhost:5000`.
 
-## Cómo Funciona
+## How It Works
 
-### 1. Crear una Sala
+### 1. Creating a Room
 
-Los usuarios pueden crear una sala haciendo clic en el botón "Crear Sala" en la página principal. Se generará un PIN para la sala, y el usuario será redirigido a la página de la sala donde podrá cargar archivos.
+Users can create a room by clicking the "Create Room" button on the main page. A PIN will be generated for the room, and the user will be redirected to the room page where files can be uploaded.
 
-### 2. Unirse a una Sala
+### 2. Joining a Room
 
-Otros usuarios pueden unirse a una sala ingresando el PIN de la sala en la página principal. Una vez dentro, podrán ver la lista de clientes conectados y los archivos disponibles para descargar.
+Other users can join a room by entering the room's PIN on the main page. Once inside, they can see the list of connected clients and the files available for download.
 
-### 3. Subida de Archivos
+### 3. File Upload
 
-Solo el propietario de la sala puede subir archivos. Estos archivos serán visibles para todos los demás clientes conectados en la sala, y se podrán descargar haciendo clic en el botón "Descargar" junto a cada archivo.
+Only the room owner can upload files. These files will be visible to all other connected clients in the room and can be downloaded by clicking the "Download" button next to each file.
 
-### 4. Actualizaciones en Tiempo Real
+### 4. Real-Time Updates
 
-La página de la sala se actualiza automáticamente cada 5 segundos para mostrar los nuevos clientes conectados y archivos subidos.
+The room page refreshes automatically every 5 seconds to display new connected clients and uploaded files.
 
-### 5. Cierre de la Sala
+### 5. Closing the Room
 
-El propietario de la sala puede cerrarla, lo que eliminará todos los archivos y desconectará a todos los clientes.
+The room owner can close the room, which deletes all files and disconnects all clients.
 
-## Contribuir
+## Contributing
 
-Si deseas contribuir a este proyecto, no dudes en enviar issues o pull requests.
+If you'd like to contribute to this project, feel free to submit issues or pull requests.
 
-## Licencia
+## License
 
-Este proyecto está licenciado bajo la Licencia MIT.
+This project is licensed under the MIT License.
